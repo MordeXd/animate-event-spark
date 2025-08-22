@@ -1,25 +1,16 @@
 import csv
 import os
-from config import Config
+from dotenv import load_dotenv
 
-# Ensure CSV file exists with headers
-def init_csv():
-    if not os.path.exists(Config.CSV_FILE):
-        with open(Config.CSV_FILE, mode="w", newline="") as file:
-            writer = csv.writer(file)
-            writer.writerow(["Full Name", "Mobile Number", "Email ID", "Address", "Referred By", "Has Interest", "Timestamp"])
+# Load environment variables
+load_dotenv()
 
-# Save a new registration to CSV
-def save_to_csv(user_data):
-    from datetime import datetime
-    with open(Config.CSV_FILE, mode="a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow([
-            user_data["full_name"],
-            user_data["mobile_number"],
-            user_data["email_id"],
-            user_data["address"],
-            user_data.get("referred_by", "N/A"),
-            "Yes" if user_data.get("has_interest", False) else "No",
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        ])
+CSV_FILE = os.getenv("CSV_FILE", "registrations.csv")
+
+def save_to_csv(data):
+    file_exists = os.path.isfile(CSV_FILE)
+    with open(CSV_FILE, mode="a", newline="", encoding="utf-8") as file:
+        writer = csv.DictWriter(file, fieldnames=data.keys())
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(data)

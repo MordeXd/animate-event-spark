@@ -1,20 +1,22 @@
 from flask import Flask
 from flask_cors import CORS
 from routes.register import register_bp
-from storage import init_csv
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
 
-# Initialize CSV with headers if it doesn't exist
-init_csv()
-
-# Register blueprints
+# Register blueprint
 app.register_blueprint(register_bp)
 
 @app.route('/')
 def home():
-    return "Event Registration API (CSV Storage) Running!"
+    return "Event Registration API Running!"
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+    port = int(os.getenv("PORT", 5000))
+    app.run(debug=True, host="0.0.0.0", port=port)
