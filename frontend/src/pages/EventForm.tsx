@@ -75,8 +75,7 @@ export function EventForm() {
 
   try {
     // Send form data to your Python backend
-    const response = await fetch(`https://animate-event-spark.onrender.com/api/register
-`, {
+    const response = await fetch(`http://127.0.0.1:5000/api/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
