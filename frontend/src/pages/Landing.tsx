@@ -25,7 +25,7 @@ export function Landing() {
             className="text-2xl font-bold gradient-text"
             whileHover={{ scale: 1.05 }}
           >
-            EventSpark
+            Wellness Immigration
           </motion.div>
           <ThemeToggle />
         </motion.header>
@@ -46,21 +46,21 @@ export function Landing() {
               transition={{ duration: 1, delay: 0.5 }}
             >
               <motion.span
-                className="gradient-text"
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.7 }}
-              >
-                Hello and Welcome
-              </motion.span>
-              <br />
-              <motion.span
                 className="text-foreground"
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 1 }}
               >
-                to the Event
+                Share your expriance 
+              </motion.span>
+              <br />
+              <motion.span
+                className="gradient-text"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.7 }}
+              >
+                By filling this Form
               </motion.span>
             </motion.h1>
 
@@ -71,7 +71,7 @@ export function Landing() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 1.3 }}
             >
-              Join us for an amazing experience. Register now to secure your spot at this incredible gathering.
+              We’d love to hear your thoughts! Take a moment to complete the form and let us know how we can make things even better.
             </motion.p>
 
             {/* CTA Button */}

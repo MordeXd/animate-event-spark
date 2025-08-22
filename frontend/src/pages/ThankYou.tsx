@@ -148,7 +148,7 @@ export function ThankYou() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 1.2 }}
             >
-              Your registration has been successfully submitted. We're excited to have you join us!
+              Thanks for sharing your feedback! We really value your thoughts and appreciate your time!
             </motion.p>
           </motion.div>
 
@@ -165,7 +165,7 @@ export function ThankYou() {
               <Sparkles className="w-5 h-5 text-secondary" />
             </div>
             <p className="text-muted-foreground text-sm">
-              You'll receive a confirmation email shortly with event details and further instructions.
+              Exciting news ahead! Watch your inbox for updates and important announcements.
             </p>
           </motion.div>
 
