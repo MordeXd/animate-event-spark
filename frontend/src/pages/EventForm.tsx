@@ -66,47 +66,41 @@ export function EventForm() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  // Validate form fields
-  if (!validateForm()) return;
+    if (!validateForm()) return;
 
-  setIsSubmitting(true);
+    setIsSubmitting(true);
 
-  try {
-    // Send form data to your Python backend
-    const response = await fetch(`http://127.0.0.1:5000/api/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        fullName: formData.fullName,
-        mobileNumber: formData.mobileNumber,
-        emailId: formData.emailId,
-        address: formData.address,
-        referredBy: formData.referredBy,
-        hasInterest: formData.hasInterest,
-      }),
-    });
+    try {
+      // Send form data to backend
+      const response = await fetch(`http://127.0.0.1:5000/api/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.fullName,
+          number: formData.mobileNumber,
+          email: formData.emailId,
+          message: formData.address, // Backend expects "message"
+        }),
+      });
 
-    const result = await response.json();
+      const result = await response.json();
 
-    if (response.ok) {
-      // Success → redirect to ThankYou page
-      navigate("/thank-you");
-    } else {
-      // Backend returned an error
-      alert(result.error || "Failed to submit. Please try again.");
+      if (response.ok) {
+        navigate("/thank-you");
+      } else {
+        alert(result.error || "Failed to submit. Please try again.");
+      }
+    } catch (error) {
+      console.error("Submission error:", error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-  } catch (error) {
-    console.error("Submission error:", error);
-    alert("Something went wrong. Please try again.");
-  } finally {
-    setIsSubmitting(false);
-  }
-};
-
+  };
 
   const updateField = (field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -175,6 +169,7 @@ export function EventForm() {
                   initial="hidden"
                   animate="show"
                 >
+                  {/* Full Name */}
                   <motion.div
                     variants={{
                       hidden: { opacity: 0, x: -20 },
@@ -190,6 +185,7 @@ export function EventForm() {
                     />
                   </motion.div>
 
+                  {/* Mobile Number */}
                   <motion.div
                     variants={{
                       hidden: { opacity: 0, x: -20 },
@@ -206,6 +202,7 @@ export function EventForm() {
                     />
                   </motion.div>
 
+                  {/* Email Address */}
                   <motion.div
                     variants={{
                       hidden: { opacity: 0, x: -20 },
@@ -222,6 +219,7 @@ export function EventForm() {
                     />
                   </motion.div>
 
+                  {/* Address */}
                   <motion.div
                     variants={{
                       hidden: { opacity: 0, x: -20 },
@@ -237,6 +235,7 @@ export function EventForm() {
                     />
                   </motion.div>
 
+                  {/* Referred By */}
                   <motion.div
                     variants={{
                       hidden: { opacity: 0, x: -20 },
