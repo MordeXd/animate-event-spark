@@ -6,34 +6,29 @@ import { FloatingInput } from '@/components/FloatingInput';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
 import { ArrowLeft, Send } from 'lucide-react';
 
 interface FormData {
-  fullName: string;
-  mobileNumber: string;
-  emailId: string;
-  address: string;
-  referredBy: string;
-  hasInterest: boolean;
+  name: string;
+  number: string;
+  email: string;
+  message: string;
 }
 
 interface FormErrors {
-  fullName?: string;
-  mobileNumber?: string;
-  emailId?: string;
-  address?: string;
+  name?: string;
+  number?: string;
+  email?: string;
+  message?: string;
 }
 
 export function EventForm() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState<FormData>({
-    fullName: '',
-    mobileNumber: '',
-    emailId: '',
-    address: '',
-    referredBy: '',
-    hasInterest: false,
+    name: '',
+    number: '',
+    email: '',
+    message: '',
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -41,24 +36,24 @@ export function EventForm() {
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
-    if (!formData.fullName.trim()) {
-      newErrors.fullName = 'Full name is required';
+    if (!formData.name.trim()) {
+      newErrors.name = 'Full name is required';
     }
 
-    if (!formData.mobileNumber.trim()) {
-      newErrors.mobileNumber = 'Mobile number is required';
-    } else if (!/^\d{10}$/.test(formData.mobileNumber.replace(/\D/g, ''))) {
-      newErrors.mobileNumber = 'Please enter a valid 10-digit mobile number';
+    if (!formData.number.trim()) {
+      newErrors.number = 'Mobile number is required';
+    } else if (!/^\d{10}$/.test(formData.number.replace(/\D/g, ''))) {
+      newErrors.number = 'Please enter a valid 10-digit mobile number';
     }
 
-    if (!formData.emailId.trim()) {
-      newErrors.emailId = 'Email is required';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.emailId)) {
-      newErrors.emailId = 'Please enter a valid email address';
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email address is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      newErrors.email = 'Please enter a valid email address';
     }
 
-    if (!formData.address.trim()) {
-      newErrors.address = 'Address is required';
+    if (!formData.message.trim()) {
+      newErrors.message = 'Message is required';
     }
 
     setErrors(newErrors);
@@ -73,38 +68,32 @@ export function EventForm() {
     setIsSubmitting(true);
 
     try {
-      // Send form data to backend
       const response = await fetch(`http://127.0.0.1:5000/api/register`, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: formData.fullName,
-          number: formData.mobileNumber,
-          email: formData.emailId,
-          message: formData.address, // Backend expects "message"
-        }),
+        body: JSON.stringify(formData), // Send the formData directly
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        navigate("/thank-you");
+        navigate('/thank-you');
       } else {
-        alert(result.error || "Failed to submit. Please try again.");
+        alert(result.error || 'Failed to submit. Please try again.');
       }
     } catch (error) {
-      console.error("Submission error:", error);
-      alert("Something went wrong. Please try again.");
+      console.error('Submission error:', error);
+      alert('Something went wrong. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const updateField = (field: keyof FormData, value: string | boolean) => {
+  const updateField = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    if (errors[field as keyof FormErrors]) {
+    if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
   };
@@ -155,120 +144,59 @@ export function EventForm() {
 
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Form Fields */}
                 <motion.div
                   className="grid gap-6"
-                  variants={{
-                    hidden: {},
-                    show: {
-                      transition: {
-                        staggerChildren: 0.1,
-                      },
-                    },
-                  }}
                   initial="hidden"
                   animate="show"
+                  variants={{
+                    hidden: {},
+                    show: { transition: { staggerChildren: 0.1 } },
+                  }}
                 >
                   {/* Full Name */}
-                  <motion.div
-                    variants={{
-                      hidden: { opacity: 0, x: -20 },
-                      show: { opacity: 1, x: 0 },
-                    }}
-                  >
+                  <motion.div variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}>
                     <FloatingInput
                       label="Full Name"
-                      value={formData.fullName}
-                      onChange={(value) => updateField('fullName', value)}
-                      error={errors.fullName}
+                      value={formData.name}
+                      onChange={(value) => updateField('name', value)}
+                      error={errors.name}
                       required
                     />
                   </motion.div>
 
                   {/* Mobile Number */}
-                  <motion.div
-                    variants={{
-                      hidden: { opacity: 0, x: -20 },
-                      show: { opacity: 1, x: 0 },
-                    }}
-                  >
+                  <motion.div variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}>
                     <FloatingInput
                       label="Mobile Number"
                       type="tel"
-                      value={formData.mobileNumber}
-                      onChange={(value) => updateField('mobileNumber', value)}
-                      error={errors.mobileNumber}
+                      value={formData.number}
+                      onChange={(value) => updateField('number', value)}
+                      error={errors.number}
                       required
                     />
                   </motion.div>
 
                   {/* Email Address */}
-                  <motion.div
-                    variants={{
-                      hidden: { opacity: 0, x: -20 },
-                      show: { opacity: 1, x: 0 },
-                    }}
-                  >
+                  <motion.div variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}>
                     <FloatingInput
                       label="Email Address"
                       type="email"
-                      value={formData.emailId}
-                      onChange={(value) => updateField('emailId', value)}
-                      error={errors.emailId}
+                      value={formData.email}
+                      onChange={(value) => updateField('email', value)}
+                      error={errors.email}
                       required
                     />
                   </motion.div>
 
-                  {/* Address */}
-                  <motion.div
-                    variants={{
-                      hidden: { opacity: 0, x: -20 },
-                      show: { opacity: 1, x: 0 },
-                    }}
-                  >
+                  {/* Message */}
+                  <motion.div variants={{ hidden: { opacity: 0, x: -20 }, show: { opacity: 1, x: 0 } }}>
                     <FloatingInput
-                      label="Address"
-                      value={formData.address}
-                      onChange={(value) => updateField('address', value)}
-                      error={errors.address}
+                      label="Message"
+                      value={formData.message}
+                      onChange={(value) => updateField('message', value)}
+                      error={errors.message}
                       required
                     />
-                  </motion.div>
-
-                  {/* Referred By */}
-                  <motion.div
-                    variants={{
-                      hidden: { opacity: 0, x: -20 },
-                      show: { opacity: 1, x: 0 },
-                    }}
-                  >
-                    <FloatingInput
-                      label="Referred By (Optional)"
-                      value={formData.referredBy}
-                      onChange={(value) => updateField('referredBy', value)}
-                    />
-                  </motion.div>
-
-                  {/* Interest Checkbox */}
-                  <motion.div
-                    className="flex items-center space-x-3 p-4 bg-card/50 rounded-lg border border-border/50"
-                    variants={{
-                      hidden: { opacity: 0, x: -20 },
-                      show: { opacity: 1, x: 0 },
-                    }}
-                    whileHover={{ scale: 1.02 }}
-                  >
-                    <Checkbox
-                      id="interest"
-                      checked={formData.hasInterest}
-                      onCheckedChange={(checked) => updateField('hasInterest', !!checked)}
-                    />
-                    <label
-                      htmlFor="interest"
-                      className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
-                    >
-                      I am interested in future events and updates
-                    </label>
                   </motion.div>
                 </motion.div>
 
