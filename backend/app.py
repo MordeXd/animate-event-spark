@@ -8,7 +8,11 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+
+# ===== Update CORS =====
+CORS(app, resources={r"/api/*": {"origins": "*"}})
+# Production me "*" ko replace karo apne hosted frontend URL se:
+# CORS(app, resources={r"/api/*": {"origins": "https://your-frontend-host.com"}})
 
 # Register blueprint
 app.register_blueprint(register_bp)
